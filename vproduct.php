@@ -113,7 +113,7 @@ $discount_value = 10;
 								{
 							
 						?>
-						<div class="col-lg-3 col-sm-6 p-0" style="margin-top:10px;">
+						<div class="col-lg-4 col-sm-6 p-0" style="margin-top:10px;">
 							<div class="card product-men p-3" style="height:450px"  >
 								<div class="men-thumb-item" >
 									<img src="<?php print $row['photo'];?>" height="250px" width="250px" alt="img" class="card-img-top">
@@ -127,9 +127,16 @@ $discount_value = 10;
 								<div class="card-body  py-3 px-2"  style="height:80px">
 									<h5 class="card-title text-capitalize"><?php print $row['name'];?></h5>
 									<div class="card-text d-flex justify-content-between">
-										<p class="text-dark font-weight-bold"><?php print $row['price'];?></p>
-										<p class="line-through"><?php print $row['price'] + 250;?></p>
+										<p class="text-dark font-weight-bold">Rs <?php print $row['price'];?> /- </p>
+										
+										<p class="line-through">
+										<?php 
+										$price = round($row['price'] + ($row['price']*10/100));
+										print " Rs : $price /- ";
+										
+										?></p>
 									</div>
+									<p class="text-dark font-weight-bold"> Discount 10% </p>
 								</div>
 								<!-- <div class="UkUFwK">
 									<span>30% off</span></div> -->

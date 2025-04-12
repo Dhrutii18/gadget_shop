@@ -1,16 +1,7 @@
 
-
 <!DOCTYPE html>
 <html lang="zxx">
-<?php
-include("connect.php");
-if(isset($_GET['a_id']))
-{
-	$a_id=$_GET['a_id'];
-	$qd="delete from addtocart where a_id='$a_id'";
-	mysqli_query($cn,$qd);
-}
-?>
+
 
 <head>
     <title></title>
@@ -43,8 +34,26 @@ if(isset($_GET['a_id']))
 </head>
 
 <body>
+
+
 	 <!-- header -->
 <?php include("menu.php");?>
+
+<?php
+
+  
+
+include("connect.php");
+
+
+$u_id = intval($_SESSION['u_id']); 
+if(isset($_GET['a_id']))
+{
+	$a_id=$_GET['a_id'];
+	$qd="delete from addtocart where a_id='$a_id'";
+	mysqli_query($cn,$qd);
+}
+?>
     <!-- //header -->
 	<!-- inner banner -->
 	<div class="ibanner_w3 pt-sm-5 pt-3">
@@ -68,6 +77,14 @@ if(isset($_GET['a_id']))
             <div class="check_w3ls">
                 
 				<div class="checkout-right">
+                <?php
+						$c=0;
+						$total=1;
+						$ordertotal=0;
+						$q="select a.*,p.* from addtocart a , product p where p.p_id=a.p_id and a.reg_id=$u_id";	
+                        $rs=mysqli_query($cn,$q);		
+                        if (mysqli_num_rows($rs) > 0) {	
+                            ?>
                     <table class="timetable_sub">
                         <thead>
                             <tr>
@@ -82,16 +99,11 @@ if(isset($_GET['a_id']))
                             </tr>
                         </thead>
                         <tbody>
-						<?php
-						$c=0;
-						$total=1;
-						$gtotal=0;
-						$q="select a.*,p.* from addtocart a , product p where p.p_id=a.p_id";
-						$rs=mysqli_query($cn,$q);
-							while($row=mysqli_fetch_array($rs))
+							<?php 
+                        	while($row=mysqli_fetch_array($rs))
 								{
 									$total=$row['price'] * $row['qty'];
-									$gtotal =$gtotal + $total;
+									$ordertotal =$ordertotal + $total;
 							$c++;
 						?>
                             <tr class="rem1">
@@ -101,11 +113,9 @@ if(isset($_GET['a_id']))
                                         <img src="<?php print $row['photo']?>" alt=" " class="img-responsive">
                                     </a>
                                 </td>
-                                <td class="invert">
-                                    <div class="quantity">
-                                                <span><?php print $row['qty']?></span>
-                                                                            </td>
                                 <td class="invert"><?php print $row['name']?></td>
+                                <td class="invert"><?php print $row['qty']?></td>                                                                            </td>
+                               
 
                                 <td class="invert"><?php print $row['price']?></td>
                                 <td class="invert"><?php print $total?></td>
@@ -117,13 +127,16 @@ if(isset($_GET['a_id']))
 							
 						
 						<?php
+                        $_SESSION['ordertotal']=$ordertotal;
+
 						}
 						?>
 						<tr>
 							<td colspan="5"></td>
-							<td><?php print $gtotal;?></td>
+							<td><?php print $ordertotal;?></td>
 							<td></td>
 						</tr>
+                        
 						<tr>
 							
 							<td colspan="7" align="center">
@@ -133,9 +146,22 @@ if(isset($_GET['a_id']))
 							
 							
 							</tr>
+                            
+                      
                         </tbody>
                     </table>
-                </div>
+                    <?php
+                }
+                else{
+
+                                    ?> 
+                   <h3 class="text-center">Cart Empty</h3>
+                    <?php
+                                }
+                                ?>                     
+                                           
+                                           
+                       </div>
                 <?php
 					include("footer.php");
 				?>

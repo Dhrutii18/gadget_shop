@@ -3,6 +3,7 @@
 
 include("connect.php");
 
+
 ?>
 
 <!DOCTYPE html>
@@ -43,23 +44,24 @@ include("connect.php");
     <!-- header -->
 <?php 
 include("menu.php");
-$ordertotal=intval($_SESSION['ordertotal']);
-
-
+$gtotal=intval($_SESSION['gtotal']);
 $u_id = $_SESSION['u_id'];
-$q="delete from payment_pending";
+
+$q="delete from rent_pending";
 mysqli_query($cn,$q);
-$q= "SELECT * FROM addtocart WHERE reg_id = '$u_id'";
+$q= "SELECT * FROM rentorder WHERE u_id = '$u_id'";
 			$rs=mysqli_query($cn,$q);
 			while($row=mysqli_fetch_array($rs))
 			{
-        $a_id=$row['a_id'];
+                $r_id=$row['r_id'];
 				$p_id=$row['p_id'];
-				$qty=$row['qty'];
-				$reg_id=$row['reg_id'];
-        $q="insert into payment_pending(a_id,p_id,qty,reg_id)values('$a_id','$p_id','$qty','$reg_id')";
+				$start_date=$row['start_date'];
+                $end_date=$row['end_date'];
+				$u_id=$row['u_id'];
+        $q="insert into rent_pending(r_id,p_id,start_date,end_date,u_id)values('$r_id','$p_id','$start_date','$end_date','$u_id')";
 				mysqli_query($cn,$q);
 			}
+?>
 ?>
 	<!-- inner banner -->
 	<div class="ibanner_w3 pt-sm-5 pt-3">
@@ -74,7 +76,7 @@ $q= "SELECT * FROM addtocart WHERE reg_id = '$u_id'";
             <li class="breadcrumb-item">
                 <a href="#">Home</a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">Order</li>
+            <li class="breadcrumb-item active" aria-current="page">Book</li>
         </ol>
     </nav>
     <!-- //breadcrumbs -->
@@ -82,48 +84,48 @@ $q= "SELECT * FROM addtocart WHERE reg_id = '$u_id'";
     <section class="wthree-row pt-3 pb-sm-5 w3-contact">
         <div class="container py-sm-5 pb-5">
             <h5 class="head_agileinfo text-center text-capitalize pb-5">
-                <span></span>order</h5>
+                <span></span>Book Now</h5>
             <div class="row contact-form pt-lg-5">
 			<div class="col-lg-2"></div>
                 <div class="col-lg-8 wthree-form-left">
                     <div class="contact-top1">
-    <form id="redirectForm" method="post" action="request.php">
+                    <form id="redirectForm" method="post" action="rent_request.php">
        
-        <div class="form-group">
-          <label>Order ID:</label><br>
-          <input class="form-control" name="orderId" value="<?php echo"ORDER".rand(111,999);?>"/>
-        </div>
-        <div class="form-group">
-          <label>Order Amount:</label><br>
-          <input class="form-control" name="orderAmount" value="<?php echo $ordertotal;?>"/>
-        </div>
-       
-        <div class="form-group">
-          <label>Order Note:</label><br>
-          <input class="form-control" name="orderNote" placeholder="Enter Order Note here (Ex. Test order)"/>
-        </div>    
-        <div class="form-group">
-          <label>Name:</label><br>
-          <input class="form-control" name="customerName" placeholder="Enter your name here (Ex. John Doe)"/>
-        </div>
-        <div class="form-group">
-          <label>Email:</label><br>
-          <input class="form-control" name="customerEmail" placeholder="Enter your email address here (Ex. Johndoe@test.com)"/>
-        </div>
-        <div class="form-group">
-          <label>Phone:</label><br>
-          <input class="form-control" name="customerPhone" placeholder="Enter your phone number here (Ex. 9999999999)"/>
-        </div>
-       
-        <input type="hidden" class="form-control" name="orderCurrency" value="INR" placeholder="Enter Currency here (Ex. INR)"/>
-          <input type="hidden" class="form-control" name="returnUrl" value="http://localhost/gadget_shop/response.php"/>
-            <input type="hidden" class="form-control" name="appId" value="TEST1041276579bf61c30bb20b3d390e56721401" />
-          <input type="hidden" class="form-control" name="notifyUrl" value="http://localhost/gadget_shop/response.php"/>
-       
-        <button type="submit" class="btn btn-primary btn-block" value="Pay">Submit</button>
-        <br> 
-        <br>
-      </form>
+       <div class="form-group">
+         <label>Rent ID:</label><br>
+         <input class="form-control" name="orderId" value="<?php echo"RENT".rand(111,999);?>"/>
+       </div>
+       <div class="form-group">
+         <label>Rent Amount:</label><br>
+         <input class="form-control" name="orderAmount" value="<?php echo $gtotal;?>"/>
+       </div>
+      
+       <div class="form-group">
+         <label>Rent Note:</label><br>
+         <input class="form-control" name="orderNote" placeholder="Enter Order Note here (Ex. Test order)"/>
+       </div>    
+       <div class="form-group">
+         <label>Name:</label><br>
+         <input class="form-control" name="customerName" placeholder="Enter your name here (Ex. John Doe)"/>
+       </div>
+       <div class="form-group">
+         <label>Email:</label><br>
+         <input class="form-control" name="customerEmail" placeholder="Enter your email address here (Ex. Johndoe@test.com)"/>
+       </div>
+       <div class="form-group">
+         <label>Phone:</label><br>
+         <input class="form-control" name="customerPhone" placeholder="Enter your phone number here (Ex. 9999999999)"/>
+       </div>
+      
+       <input type="hidden" class="form-control" name="orderCurrency" value="INR" placeholder="Enter Currency here (Ex. INR)"/>
+         <input type="hidden" class="form-control" name="returnUrl" value="http://localhost/gadget_shop/rent_response.php"/>
+           <input type="hidden" class="form-control" name="appId" value="TEST1041276579bf61c30bb20b3d390e56721401" />
+         <input type="hidden" class="form-control" name="notifyUrl" value="http://localhost/gadget_shop/rent_response.php"/>
+      
+       <button type="submit" class="btn btn-primary btn-block" value="Pay">Submit</button>
+       <br> 
+       <br>
+     </form>
                     </div>
                     <!--  //contact form grid ends here -->
                 </div>

@@ -17,24 +17,24 @@ include("connect.php");
     <section class="wthree-row pt-3 pb-sm-5 w3-contact">
         <div class="container py-sm-5 pb-5">
             <h5 class="head_agileinfo text-center text-capitalize pb-5">
-                <span>V</span>iew Order</h5>
+                <span>V</span>iew Rent</h5>
             <div class="row contact-form pt-lg-5">
 			<div class="col-lg-2"></div>
                 <div class="col-lg-8 wthree-form-left">
                     <div class="contact-top1">
-                        <table class="table">
+                        
+                        <table class="table table-resposive table-bordered">
 							<tr>
-							<td>Product Details</td>
-							<td>Quntity</td>
-							<td>name</td>
-							<td>city</td>
-							<td>address</td>
-							
-							
-							
+							<th>Product Name</th>
+							<th>name</th>
+							<th>city</th>
+							<th>address</th>
+							<th>Start Date</th>
+							<th>End Date</th>
+                           
 							</tr>
 							<?php
-								$q="select o.*,u.*,p.name as pname from ordermaster o, user u,product p where u.u_id=o.u_id and p.p_id=o.p_id";
+								$q="select r.*,u.*,p.name as pname from rentmaster r, user u,product p where u.u_id=r.u_id and p.p_id=r.p_id";
 								$rs=mysqli_query($cn,$q);
 								while($row=mysqli_fetch_array($rs))
 								{
@@ -43,14 +43,13 @@ include("connect.php");
 														
 							<tr>
 								<td><?php print $row['pname'];?></td>
-								<td><?php print $row['qty'];?></td>
 								<td><?php print $row['name'];?></td>
 								<td><?php print $row['city'];?></td>
 								<td><?php print $row['address'];?></td>
 								
-				
-				
-								
+                                <td><?php print $row['start_date'];?></td>
+                                <td><?php print $row['end_date'];?></td>
+                                							
 								
 							</tr>
 							<?php

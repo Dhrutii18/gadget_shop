@@ -89,6 +89,9 @@
                         <li class="nav-item">
                             <a class="nav-link " href="vieworder.php">Order</a>
                         </li>  
+                        <li class="nav-item">
+                            <a class="nav-link " href="viewrent.php">Rent</a>
+                        </li>  
 						<li class="nav-item">
                             <a class="nav-link " href="logout.php">Logout</a>
                         </li>

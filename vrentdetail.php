@@ -44,18 +44,18 @@ include("connect.php");
 </head>
 
 <body>
+    <?php
+    include("menu.php");
 
-<?php
- include("menu.php");
+    ?>
 
+
+    <?php
     if (!isset($_SESSION['u_id'])) {
-        header("Location:userlogin.php");
+        header("location:userlogin.php");
     }
 
     ?>
-    
-
-
 
     <!-- //header -->
     <!-- inner banner -->
@@ -114,8 +114,8 @@ include("connect.php");
                         </h3>
                         <div class="caption">
                             <div class="clearfix"> </div>
-                            <h6>
-                                <?php print $row['price']; ?></h6>
+                            <h3>
+                                <?php print "Rent Rs. ".$row['rent']; ?></h3>
                         </div>
                         <div class="desc_single">
                             <h5>Description</h5>
@@ -128,10 +128,13 @@ include("connect.php");
 
                         </div>
                         <div class="description">
-                            <form action="addtocart_code.php" method="post">
+                            <form action="bookrent_code.php" method="post">
                                 <input type="hidden" name="p_id" value="<?php print $p_id; ?>">
-                                <input type="text" placeholder="Enter Quntity" name="qty" required>
-                                <input type="submit" value="Add To Cart" name="btn">
+                                <span>Start Date</span>
+                                <input type="date" placeholder="start date" name="start_date" required>
+                                <span>End Date</span> 
+                                <input type="date" placeholder="End date" name="end_date" onfocus="(this.type='date')" required>
+                                <input type="submit" value="Submit" name="btn" class="btn">
 
                             </form>
                         </div>

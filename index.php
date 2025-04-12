@@ -2,8 +2,6 @@
 <?php
 
 include("connect.php");
-
-
 ?>
 
 <!DOCTYPE html>

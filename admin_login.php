@@ -88,6 +88,7 @@ include("connect.php");
                                 <input type="password" class="form-control" name="password" id="contactemail" required>
                             </div>
                             <button type="submit" class="btn btn-info btn-block">Submit</button>
+                            
                         </form>
                     </div>
                     <!--  //contact form grid ends here -->

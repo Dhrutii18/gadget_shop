@@ -61,6 +61,10 @@ include("connect.php");
                                 <label for="contactusername">price</label>
                                 <input type="text" class="form-control"  pattern="[0-9]*$" id="contactusername" name="price" required>
                             </div>
+                            <div class="form-group">
+                                <label for="rent">Rent</label>
+                                <input type="text" class="form-control"  pattern="[0-9]*$" id="rent" name="rent" required>
+                            </div>
                             <button type="submit" class="btn btn-info btn-block">add</button>
                         </form>
                     </div>

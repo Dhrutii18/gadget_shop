@@ -37,7 +37,7 @@ session_start();
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="vproduct.php">Rent</a>
+                            <a class="nav-link" href="vrent.php">Rent</a>
                         </li>
 
 						<?php
@@ -61,6 +61,15 @@ session_start();
 						?>
                         <li class="nav-item">
                             <a class="nav-link" href="vcart.php">My Cart</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="bookrent.php">Rent Cart</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="myorder.php">My Order</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="myrent.php">My Rent</a>
                         </li>
 						<li class="nav-item">
                             <a class="nav-link" href="logout.php">Logout</a>

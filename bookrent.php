@@ -1,22 +1,25 @@
+
+
 <!DOCTYPE html>
 <html lang="zxx">
 <?php
-
 include("connect.php");
-
-
+if(isset($_GET['r_id']))
+{
+	$r_id=$_GET['r_id'];
+	$qd="delete from rentorder where r_id='$r_id'";
+	mysqli_query($cn,$qd);
+}
 ?>
 
 <head>
     <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8" />
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <meta name="keywords" content="Fashion Hub Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
 	SmartPhone Compatible web template, free WebDesigns for Nokia, Samsung, LG, Sony Ericsson, Motorola web design" />
     <script>
-        addEventListener("load", function() {
+        addEventListener("load", function () {
             setTimeout(hideURLbar, 0);
         }, false);
 
@@ -28,11 +31,7 @@ include("connect.php");
     <link href="css/bootstrap.css" type="text/css" rel="stylesheet" media="all">
     <!-- shop css -->
     <link href="css/shop.css" type="text/css" rel="stylesheet" media="all">
-    <!-- Owl-Carousel-CSS -->
-    <link rel="stylesheet" href="css/owl.carousel.css" type="text/css" media="all">
-    <!-- flexslider-css -->
-    <link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen" />
-
+    <link href="css/checkout.css" type="text/css" rel="stylesheet" media="all">
     <link href="css/style.css" type="text/css" rel="stylesheet" media="all">
     <!-- font-awesome icons -->
     <link href="css/fontawesome-all.min.css" rel="stylesheet">
@@ -44,141 +43,138 @@ include("connect.php");
 </head>
 
 <body>
-
+	 <!-- header -->
+<?php include("menu.php");?>
 <?php
- include("menu.php");
-
-    if (!isset($_SESSION['u_id'])) {
-        header("Location:userlogin.php");
-    }
-
-    ?>
-    
-
-
-
+include("connect.php");
+$u_id = intval($_SESSION['u_id']); 
+?>
     <!-- //header -->
-    <!-- inner banner -->
-    <div class="ibanner_w3 pt-sm-5 pt-3">
-        <h4 class="head_agileinfo text-center text-capitalize text-center pt-5">
-        </h4>
-    </div>
-    <!-- //inner banner -->
+	<!-- inner banner -->
+	<div class="ibanner_w3 pt-sm-5 pt-3">
+		<h4 class="head_agileinfo text-center text-capitalize text-center pt-5">
+			</h4>
+	</div>
+	<!-- //inner banner -->
     <!-- breadcrumbs -->
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="#">Home</a>
+                <a href="index.html">Home</a>
             </li>
-            <li class="breadcrumb-item">
-                <a href="#">Product</a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">Single Product</li>
+            <li class="breadcrumb-item active" aria-current="page">Rent</li>
         </ol>
     </nav>
     <!-- //breadcrumbs -->
-
-    <?php
-    ?>
-    <!-- Single -->
-    <div class="innerf-pages section py-5">
+    <!--checkout-->
+    <section class="checkout_wthree py-sm-5 py-3">
         <div class="container">
-            <div class="row my-sm-5">
-
+            <div class="check_w3ls">
+                
+				<div class="checkout-right">
                 <?php
-                $p_id = $_GET['p_id'];
-                $q = "select * from product where p_id='$p_id'";
-                $rs = mysqli_query($cn, $q);
-                while ($row = mysqli_fetch_array($rs)) {
+                       
+                       $c=0;
+                       $gtotal=0;
+                       $total=1;
+                       $q="select r.*,p.* from rentorder r , product p where p.p_id=r.p_id and r.u_id=$u_id";
+                       $rs=mysqli_query($cn,$q);
+                       if (mysqli_num_rows($rs)>0){
+                        ?>
+                    <table class="timetable_sub">
+                        <thead>
+                            <tr>
+                                <th>SL No. 	</th>
+                                <th>Product</th>
+                                <th>Product Name</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+								<th>Days</th>
+                                <th>Rent</th>
+                                <th>Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+						<?php
+							while($row=mysqli_fetch_array($rs))
+								{
+									$total=$total+ $row['rent'];
+									$start_date=new DateTime($row['start_date']);
+                                    $end_date=new DateTime($row['end_date']);
+                                    $interval = date_diff($start_date, $end_date);
+                                    $days = $interval->days;
+                                    $days=$days+1;
+                                    $_SESSION["start_date"] =$row['start_date'];
+                                    $_SESSION["end_date"] = $row['end_date'];
+                                    $_SESSION["days"] = $days;
+                                    $total=$days * $row['rent'];   
+                                    $_SESSION["total"] = $total; 
+							$c++;
+						?>
+                            <tr class="rem1">
+                                <td class="invert"><?php print $c;?></td>
+                                <td class="invert-image">
+                                    <a href="single_product.html">
+                                        <img src="<?php print $row['photo']?>" alt=" " class="img-responsive">
+                                    </a>
+                                </td>
+                                <td class="invert">
+                                    <div class="quantity">
+                                                <span><?php print $row['name']?></span>
+                                                                            </td>
+                                <td class="invert"><?php print $row['start_date']?></td>
 
-                ?>
-                    <div class="col-lg-4 single-right-left">
-                        <div class="grid images_3_of_2">
-                            <div class="flexslider1">
-                                <ul class="slides">
-                                    <li data-thumb="images/mff1.jpg">
-                                        <div class="thumb-image">
-                                            <img src="<?php print $row['photo']; ?>" style="width:250px;height:250px" data-imagezoom="true" alt=" " class="img-fluid">
-                                        </div>
-                                    </li>
-
-                                </ul>
-                                <div class="clearfix"></div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="col-lg-8 mt-lg-0 mt-5 single-right-left simpleCart_shelfItem">
-                        <h3><?php print $row['name']; ?>
-                        </h3>
-                        <div class="caption">
-                            <div class="clearfix"> </div>
-                            <h6>
-                                <?php print $row['price']; ?></h6>
-                        </div>
-                        <div class="desc_single">
-                            <h5>Description</h5>
-                            <p><?php print $row['detail']; ?></p>
-                        </div>
-                        <div class="d-sm-flex justify-content-between">
-                            <div class="occasional">
-
-                            </div>
-
-                        </div>
-                        <div class="description">
-                            <form action="addtocart_code.php" method="post">
-                                <input type="hidden" name="p_id" value="<?php print $p_id; ?>">
-                                <input type="text" placeholder="Enter Quntity" name="qty" required>
-                                <input type="submit" value="Add To Cart" name="btn">
-
-                            </form>
-                        </div>
+                                <td class="invert"><?php print $row['end_date']?></td>
+                                
+                                <td class="invert"><?php print $days?></td>
+                                <td class="invert"><?php print $total?></td>
+                                <td class="invert">
+                                    
+									<a href="bookrent.php?r_id=<?php print $row['r_id'];?>" class="btn btn-danger">  Delete </a>
+                                </td>
+							</tr>
+                          
+							
+						
+						<?php
+                          $gtotal=$gtotal+$total;
+						}
+						?>
+						<tr>
+							<td colspan="6"></td>
+							<td><?php print $gtotal;?></td>
+							<td></td>
+						</tr>
+                        <?php
+                        $_SESSION['gtotal']=$gtotal;
+                        $_SESSION['days']=$days;
+                        $_SESSION['total']=$total;
+                        ?>
+						<tr>
+							
+							<td colspan="8" align="center">
+							
+							<a href="rentpayment.php" class="btn btn-primary">Book</a>
+							</td>
+							
+							
+							</tr>
+                        </tbody>
+                    </table>
                     <?php
                 }
-                    ?>
+                else{
 
-                    </div>
-            </div>
-        </div>
-         
-        <!-- reviews -->
-        <div class="container">
-            <div class="row mb-3">
-                <div class="col-sm-6">
-                 <h5>Reviews</h5>
-                 <?php
-                     $q = "select * from reviews where p_id='$p_id'";
-                     $data = mysqli_query($cn, $q);
-                     while ($row = mysqli_fetch_array($data)) { ?>
-                        <p class="py-2"><?php print $row['msg'];?></p>
-                        <?php
-                        }
-                     
-                ?>
+                                    ?> 
+                   <h3 class="text-center">Rent Cart Empty</h3>
+                    <?php
+                                }
+                                ?>   
                 </div>
-                <div class="col-sm-6">
-                    <h5>write review</h5>
-                    <form method="post" class="f-color">
-                            <input type="hidden" name="p_id" id="p_id" value="<?php echo $p_id;?>">
-                            <div class="form-group">
-                                <!-- <label for="contactusername">Email</label> -->
-                                <textarea class="form-control" name="msg" id="msg" required></textarea>
-                            </div>
-                            
-                            <button type="submit" id="review" name="review" class="btn btn-info btn-block"><h4>Submit</h4></button>
-						</form> 
-                </div>
-                
-            </div>
-    </div>
-    <!-- /new_arrivals -->
-    <!--// Single -->
-    <?php
-    include("footer.php");
-
-    ?> <!-- //footer -->
+                <?php
+					include("footer.php");
+				?>
+    <!-- //footer -->
     <!-- sign up Modal -->
     <div class="modal fade" id="myModal_btn" tabindex="-1" role="dialog" aria-labelledby="myModal_btn" aria-hidden="true">
         <div class="agilemodal-dialog modal-dialog" role="document">
@@ -275,40 +271,18 @@ include("connect.php");
     <!-- //js -->
     <!-- smooth dropdown -->
     <script>
-        $(document).ready(function() {
-            $('ul li.dropdown').hover(function() {
+        $(document).ready(function () {
+            $('ul li.dropdown').hover(function () {
                 $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(200);
-            }, function() {
+            }, function () {
                 $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(200);
             });
-
-            
         });
-    </script>
-   
-    <script>
-    $(document).ready(function() {
-        $("#review").click(function() {
-                var msg=$("#msg").val();
-                var p_id=$("#p_id").val();
-                console.log(p_id);
-                $.ajax({
-                url: "addreview.php",
-                type: "POST",
-            data: {p_id:p_id, msg:msg},
-            success: function (result) {
-            console.log("success");
-            // window.location = "welcome.php";
-    }
-});    
-            }); 
-
-    });
     </script>
     <!-- //smooth dropdown -->
     <!-- script for password match -->
     <script>
-        window.onload = function() {
+        window.onload = function () {
             document.getElementById("password1").onchange = validatePassword;
             document.getElementById("password2").onchange = validatePassword;
         }
@@ -324,48 +298,12 @@ include("connect.php");
         }
     </script>
     <!-- script for password match -->
-
-    <!-- FlexSlider -->
-    <script src="js/jquery.flexslider.js"></script>
-    <script>
-        // Can also be used with $(document).ready()
-        $(window).load(function() {
-            $('.flexslider1').flexslider({
-                animation: "slide",
-                controlNav: "thumbnails"
-            });
-        });
-    </script>
-    <!-- //FlexSlider-->
-    <!-- Responsiveslides -->
-    <script src="js/responsiveslides.min.js"></script>
-    <script>
-        // You can also use "$(window).load(function() {"
-        $(function() {
-            // Slideshow 4
-            $("#slider3").responsiveSlides({
-                auto: false,
-                pager: true,
-                nav: false,
-                speed: 500,
-                namespace: "callbacks",
-                before: function() {
-                    $('.events').append("<li>before event fired.</li>");
-                },
-                after: function() {
-                    $('.events').append("<li>after event fired.</li>");
-                }
-            });
-
-        });
-    </script>
-    <!-- // Responsiveslides -->
     <!-- cart-js -->
     <script src="js/minicart.js"></script>
     <script>
         hub.render();
 
-        hub.cart.on('new_checkout', function(evt) {
+        hub.cart.on('new_checkout', function (evt) {
             var items, len, i;
 
             if (this.subtotal() > 0) {
@@ -376,16 +314,57 @@ include("connect.php");
         });
     </script>
     <!-- //cart-js -->
-    <!-- zoom -->
-    <script src="js/imagezoom.js"></script>
-    <!-- zoom-->
+    <!--quantity-->
+    <script>
+        $('.value-plus').on('click', function () {
+            var divUpd = $(this).parent().find('.value'),
+                newVal = parseInt(divUpd.text(), 10) + 1;
+            divUpd.text(newVal);
+        });
+
+        $('.value-minus').on('click', function () {
+            var divUpd = $(this).parent().find('.value'),
+                newVal = parseInt(divUpd.text(), 10) - 1;
+            if (newVal >= 1) divUpd.text(newVal);
+        });
+    </script>
+    <!--quantity-->
+    <!-- FadeOut-Script -->
+    <script>
+        $(document).ready(function (c) {
+            $('.close1').on('click', function (c) {
+                $('.rem1').fadeOut('slow', function (c) {
+                    $('.rem1').remove();
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function (c) {
+            $('.close2').on('click', function (c) {
+                $('.rem2').fadeOut('slow', function (c) {
+                    $('.rem2').remove();
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function (c) {
+            $('.close3').on('click', function (c) {
+                $('.rem3').fadeOut('slow', function (c) {
+                    $('.rem3').remove();
+                });
+            });
+        });
+    </script>
+    <!--// FadeOut-Script -->
 
     <!-- start-smooth-scrolling -->
     <script src="js/move-top.js"></script>
     <script src="js/easing.js"></script>
     <script>
-        jQuery(document).ready(function($) {
-            $(".scroll").click(function(event) {
+        jQuery(document).ready(function ($) {
+            $(".scroll").click(function (event) {
                 event.preventDefault();
 
                 $('html,body').animate({
@@ -397,7 +376,7 @@ include("connect.php");
     <!-- //end-smooth-scrolling -->
     <!-- smooth-scrolling-of-move-up -->
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             /*
             var defaults = {
                 containerID: 'toTop', // fading element id
@@ -419,6 +398,5 @@ include("connect.php");
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="js/bootstrap.js"></script>
-</body>
 
 </html>
